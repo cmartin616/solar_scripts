@@ -54,8 +54,9 @@ arcpy.CheckOutExtension("spatial")
 
 print "Making temp paths"
 
-temp_dir = config.get("paths",'temp_dir'))
+temp_dir = config.get("paths",'temp_dir')
 
+# Check for existence of directories and create as needed
 if not os.path.isdir(temp_dir):
     try:
         os.mkdir(temp_dir)
@@ -65,7 +66,6 @@ if not os.path.isdir(temp_dir):
 if not os.path.isdir(temp_dir):
     print "ERROR! Couldn't create temporary directory", temp_dir
     exit()
-
 
 workspace = config.get('paths','temp_dir') + os.sep + tmpfile + '_workspace'
 if not os.path.isdir(workspace):
@@ -79,6 +79,23 @@ if not os.path.isdir(workspace):
     exit()
 
 arcpy.env.workspace = workspace
+
+# Test read/write privledges
+try:
+    ret = os.access(out_path, os.R_OK)
+    print "Read access - %s"% ret
+except:
+    print 'You do not have read access to', out_path + '.  Please contact the network admin for access.'
+    raw_input('Please press enter to exit.')
+    exit()
+
+try:
+    ret = os.access(out_path, os.W_OK)
+    print "Write access - %s"% ret
+except:
+    print 'You do not have write access to', out_path + '.  Please contact the network admin for access.'
+    raw_input('Please press enter to exit.')
+    exit()
 
 print "Making scratch workspace"
 # Make a temp directory to avoid the FATAL ERROR (INFADI)  MISSING DIRECTORY error 
