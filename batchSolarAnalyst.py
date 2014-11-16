@@ -83,7 +83,6 @@ arcpy.env.workspace = workspace
 # Test read/write privledges
 try:
     ret = os.access(out_path, os.R_OK)
-    print "Read access - %s"% ret
 except:
     print 'You do not have read access to', out_path + '.  Please contact the network admin for access.'
     raw_input('Please press enter to exit.')
@@ -91,7 +90,6 @@ except:
 
 try:
     ret = os.access(out_path, os.W_OK)
-    print "Write access - %s"% ret
 except:
     print 'You do not have write access to', out_path + '.  Please contact the network admin for access.'
     raw_input('Please press enter to exit.')
